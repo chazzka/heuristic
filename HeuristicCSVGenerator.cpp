@@ -31,7 +31,9 @@ void cec20_test_func(double*, double*, int, int, int);
 void makeCSVfile(string filename, std::vector<std::vector<result>> result)
 {
 	ofstream file;
-	file.open("/usr/src/results/" + filename + ".csv");
+	//for docker
+	//file.open("/usr/src/results/" + filename + ".csv");
+	file.open(filename + ".csv");
 	std::vector<string> tempRes;
 
 	for (unsigned int i = 0; i < result.size(); i++)
@@ -64,6 +66,7 @@ int main()
 {
 
 	cout<< "start" << endl;
+	
 	srand((unsigned)time(0));
 
 
@@ -89,6 +92,7 @@ int main()
 	}
 
 	cout<< "finish" << endl;
+	
 
 	return 0;
 }
