@@ -12,10 +12,12 @@
 
 #ifdef SOMA
 #include "SOMA.cpp"
+const char * alg_name = "SOMA";
 #endif // SOMA
 
 #ifdef JDE
 #include "JDE.cpp"
+const char * alg_name = "JDE";
 #endif // JDE
 
 
@@ -73,14 +75,7 @@ int main()
 		for (int j = 0; j < runs; j++) {
 			csv.push_back(run(dimensionSize, funkce, BOUNDARY));
 		}
-#ifdef SOMA
-		makeCSVfile("SOMA" + names[funkce - 1] + to_string(dimensionSize) + "d", csv);
-#endif // SOMA
-#ifdef JDE
-		makeCSVfile("JDE" + names[funkce - 1] + to_string(dimensionSize) + "d", csv);
-#endif // JDE
-
-
+		makeCSVfile(alg_name + names[funkce - 1] + to_string(dimensionSize) + "d", csv);
 	}
 
 	//20 D
@@ -90,14 +85,7 @@ int main()
 		for (int j = 0; j < runs; j++) {
 			csv.push_back(run(dimensionSize, funkce, BOUNDARY));
 		}
-#ifdef SOMA
-		makeCSVfile("SOMA" + names[funkce - 1] + to_string(dimensionSize) + "d", csv);
-#endif // SOMA
-#ifdef JDE
-		makeCSVfile("JDE" + names[funkce - 1] + to_string(dimensionSize) + "d", csv);
-#endif // JDE
-
-
+		makeCSVfile(alg_name + names[funkce - 1] + to_string(dimensionSize) + "d", csv);
 	}
 
 	cout<< "finish" << endl;
