@@ -1,4 +1,5 @@
 ﻿#include <vector>
+#include <random>
 using namespace std;
 
 struct jedinec

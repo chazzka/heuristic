@@ -60,7 +60,7 @@ void makeCSVfile(string filename, std::vector<std::vector<result>> result)
 
 
 int dimensionSize = 0;
-const int runs = 1;
+const int runs = 5;
 
 int main()
 {

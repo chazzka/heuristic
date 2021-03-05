@@ -50,22 +50,23 @@ inline ohodnocenaPopulace getLeader(vector<jedinec> population, int testFunction
     return { tempLeader, population };
 }
 
+
 inline vector<double> generateRandom(int size, double min, double max)
 {
-    std::vector<double> rndNumbers;
+	std::vector<double> rndNumbers;
 
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<double> distribution(min, max);
 
-    //double randomNumber;
-    for (int index = 0; index < size; index++) {
-        double rand = distribution(gen);
-        rndNumbers.push_back(rand);
-    }
+	double randomNumber;
+	for (int index = 0; index < size; index++) {
 
-    return rndNumbers;
+		randomNumber = (max - min) * ((double)rand() / (double)RAND_MAX) + min;
+		rndNumbers.push_back(randomNumber);
+	}
+
+	return rndNumbers;
 }
+
+
 
 inline vector<double> vec_subtract(vector<double> first, vector<double> second) {
     vector<double> result;
