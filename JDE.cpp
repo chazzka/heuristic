@@ -56,9 +56,9 @@ inline vector<jedinec> get3blbecky(vector<jedinec> populace, jedinec jed) {
 
 void cec20_test_func(double*, double*, int, int, int);
 
-vector<result> run(int dimension, int testFunction, int boundary);
+vector<result> run(int dimension, int testFunction, int boundaryLow, int boundaryUp);
 
-inline vector<result> run(int dimension, int testFunction, int boundary) {
+inline vector<result> run(int dimension, int testFunction, int boundaryLow, int boundaryUp) {
 
 	int d = dimension;
 	int P = 50; //teď už je to OK
@@ -74,7 +74,7 @@ inline vector<result> run(int dimension, int testFunction, int boundary) {
 	for (int i = 0; i < P; i++) {
 
 		vector<double> pozice;
-		for (double prvek : generateRandom(d, -boundary, boundary)) {
+		for (double prvek : generateRandom(d, boundaryLow, boundaryUp)) {
 			pozice.push_back(prvek);
 		}
 		jedinec tmpJedinec = { pozice, 0 };
@@ -127,8 +127,8 @@ inline vector<result> run(int dimension, int testFunction, int boundary) {
 			//VRATIT DO SPRÁVNÝCH DIMENZÍ
 
 			for (int ip = 0; ip < vi.size(); ip++) {
-				if (-boundary > vi[ip] || vi[ip] > boundary) {
-					vi[ip] = generateRandom(1, -boundary, boundary)[0];
+				if (boundaryLow > vi[ip] || vi[ip] > boundaryUp) {
+					vi[ip] = generateRandom(1, boundaryLow, boundaryUp)[0];
 				}
 			}
 

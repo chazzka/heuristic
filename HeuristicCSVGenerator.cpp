@@ -5,8 +5,8 @@
 #include <fstream>
 #include "cec20_test_func.cpp"
 
-//ZDE SI VYBER FUNCKI  (SOMA, JDE)
-#define SOMA
+//ZDE SI VYBER FUNCKI  (SOMA, JDE, PSO)
+#define PSO
 //zbytek se děje automaticky, můžeš jít spát
 
 
@@ -20,10 +20,16 @@ const char * alg_name = "SOMA";
 const char * alg_name = "JDE";
 #endif // JDE
 
+#ifdef PSO
+#include "pso.cpp"
+const char * alg_name = "PSO";
+#endif // PSO
+
 
 using namespace std;
 
-#define BOUNDARY 100
+#define BOUNDARY_LOW -100
+#define BOUNDARY_UP 100
 
 void cec20_test_func(double*, double*, int, int, int);
 
@@ -60,7 +66,7 @@ void makeCSVfile(string filename, std::vector<std::vector<result>> result)
 
 
 int dimensionSize = 0;
-const int runs = 5;
+const int runs = 10;
 
 int main()
 {
@@ -76,7 +82,7 @@ int main()
 	for (int funkce = 1; funkce <= 10; funkce++) {
 		std::vector<std::vector<result>> csv;
 		for (int j = 0; j < runs; j++) {
-			csv.push_back(run(dimensionSize, funkce, BOUNDARY));
+			csv.push_back(run(dimensionSize, funkce, BOUNDARY_LOW, BOUNDARY_UP));
 		}
 		makeCSVfile(alg_name + names[funkce - 1] + to_string(dimensionSize) + "d", csv);
 	}
@@ -86,7 +92,7 @@ int main()
 	for (int funkce = 1; funkce <= 10; funkce++) {
 		std::vector<std::vector<result>> csv;
 		for (int j = 0; j < runs; j++) {
-			csv.push_back(run(dimensionSize, funkce, BOUNDARY));
+			csv.push_back(run(dimensionSize, funkce, BOUNDARY_LOW, BOUNDARY_UP));
 		}
 		makeCSVfile(alg_name + names[funkce - 1] + to_string(dimensionSize) + "d", csv);
 	}

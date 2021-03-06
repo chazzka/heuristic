@@ -24,8 +24,6 @@ struct result
 };
 
 
-void cec20_test_func(double*, double*, int, int, int);
-
 inline ohodnocenaPopulace getLeader(vector<jedinec> population, int testFunction, int dimension)
 {
     //    double best_cost = first_dejong(population[0].position);
@@ -100,11 +98,12 @@ inline vector<double> vec_multiply_with_vector(vector<double> first, vector<doub
     return result;
 }
 
-vector<result> run(int dimension, int testFunction, int boundary);
+void cec20_test_func(double*, double*, int, int, int);
 
+vector<result> run(int dimension, int testFunction, int boundaryLow, int boundaryUp);
 
 //nedojede do 50k, protože je omezeny migracemi - šenky říkal že to do konce nedojde
-inline vector<result> run(int dimension, int testFunction, int boundary) {
+inline vector<result> run(int dimension, int testFunction, int boundaryLow, int boundaryUp) {
     
     vector<result> best_results;
     double t = 0;
@@ -123,7 +122,7 @@ inline vector<result> run(int dimension, int testFunction, int boundary) {
     for (int i = 0; i < pop_size; i++) {
 
         vector<double> pozice;
-        for (double prvek : generateRandom(d, -boundary, boundary)) {
+        for (double prvek : generateRandom(d, boundaryLow, boundaryUp)) {
             pozice.push_back(prvek);
         }
         jedinec tmpJedinec = { i, pozice, 0 };
@@ -170,8 +169,8 @@ inline vector<result> run(int dimension, int testFunction, int boundary) {
 
                     //vrat do dimenzi - check OK
                     for (int ip = 0; ip < potencial_position.size(); ip++) {
-                        if (-boundary > potencial_position[ip] || potencial_position[ip] > boundary) {
-                            vector<double> randomNUm = generateRandom(1, -boundary, boundary);
+                        if (boundaryLow > potencial_position[ip] || potencial_position[ip] > boundaryUp) {
+                            vector<double> randomNUm = generateRandom(1, boundaryLow, boundaryUp);
                             potencial_position[ip] = randomNUm[0];
                         }
                     }
