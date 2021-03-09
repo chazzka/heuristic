@@ -95,7 +95,8 @@ inline vector<result> run(int dimension, int testFunction, int boundaryLow, int 
                 //Update the particle's velocity
                 population[i].velocityVectorVi[d] = w * population[i].velocityVectorVi[d] + c1 * rp * (population[i].pBestPi[d] - population[i].positionXi[d]) + c2 * rg * (leadingPosG[d] - population[i].positionXi[d]);
                 //Update the particle's position:  můžu ve stejnem foru?
-                population[i].positionXi[d] = population[i].positionXi[d] + learningRate * population[i].velocityVectorVi[d];                
+                population[i].positionXi[d] = population[i].positionXi[d] + learningRate * population[i].velocityVectorVi[d];
+                //boundary check
                 if (boundaryLow > population[i].positionXi[d] || population[i].positionXi[d] > boundaryUp)
                 {
                     double randomNum = generateRandomDouble((double)boundaryLow, (double)boundaryUp);

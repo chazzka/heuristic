@@ -5,14 +5,19 @@
 #include <fstream>
 #include "cec20_test_func.cpp"
 
-//ZDE SI VYBER FUNCKI  (SOMA, JDE, PSO)
-#define PSO
+//ZDE SI VYBER FUNCKI  (SOMA, JDE, PSO, DE)
+#define DE
 //zbytek se děje automaticky, můžeš jít spát
 
 
 #ifdef SOMA
 #include "SOMA.cpp"
 const char * alg_name = "SOMA";
+#endif // SOMA
+
+#ifdef DE
+#include "DE.cpp"
+const char * alg_name = "DErand1bin";
 #endif // SOMA
 
 #ifdef JDE

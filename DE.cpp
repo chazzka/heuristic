@@ -1,5 +1,6 @@
 ﻿#include <vector>
 #include <random>
+#include <iostream>
 using namespace std;
 
 struct jedinec
@@ -18,9 +19,9 @@ inline vector<double> generateRandom(int size, double min, double max)
 {
 	std::vector<double> rndNumbers;
 
-
 	double randomNumber;
-	for (int index = 0; index < size; index++) {
+	for (int index = 0; index < size; index++)
+	{
 
 		randomNumber = (max - min) * ((double)rand() / (double)RAND_MAX) + min;
 		rndNumbers.push_back(randomNumber);
@@ -29,11 +30,19 @@ inline vector<double> generateRandom(int size, double min, double max)
 	return rndNumbers;
 }
 
-inline vector<jedinec> get3blbecky(vector<jedinec> populace, jedinec jed) {
+inline double generateRandomDouble(double min, double max)
+{
+	return (max - min) * ((double)rand() / (double)RAND_MAX) + min;
+}
+
+inline vector<jedinec> get3unique(vector<jedinec> populace, jedinec jed)
+{
 
 	int i = 0;
-	for (jedinec j : populace) {
-		if (j.position == jed.position) {
+	for (jedinec j : populace)
+	{
+		if (j.position == jed.position)
+		{
 			populace.erase(populace.begin() + i);
 			break;
 		}
@@ -42,7 +51,8 @@ inline vector<jedinec> get3blbecky(vector<jedinec> populace, jedinec jed) {
 
 	vector<jedinec> result;
 
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < 3; i++)
+	{
 		int ran = (rand() % populace.size());
 		result.push_back(populace.at(ran));
 		populace.erase(populace.begin() + ran);
@@ -51,17 +61,19 @@ inline vector<jedinec> get3blbecky(vector<jedinec> populace, jedinec jed) {
 	return result;
 }
 
-void cec20_test_func(double*, double*, int, int, int);
+void cec20_test_func(double *, double *, int, int, int);
 
-vector<result> run(int dimension, int testFunction);
+vector<result> run(int dimension, int testFunction, double boundaryLow, double boundaryUp);
 
-//TODO: dodělat dimension a seed a boundary !!!!!
-inline vector<result> run(int dimension, int testFunction) {
-	//inputs
+//DE/rand/1/bin
+inline vector<result> run(int dimension, int testFunction, double boundaryLow, double boundaryUp)
+{
+	//Choose the parameters
 	int d = dimension;
-	int P = 10 * d;
-	float c = 0.5;
-	double F = 0.9;
+	int P = 50;
+	float CR = 0.9;
+	double F = 0.8;
+	int iterations = 1000;
 
 	//helper vars
 	int fezCounter = 0;
@@ -69,92 +81,92 @@ inline vector<result> run(int dimension, int testFunction) {
 
 	vector<result> bestResults;
 
-	//generujeme populaci jedinců o velikosti P a dimenze D
+	//Initialize all agents x with random positions in the search-space.
 	vector<jedinec> populace;
-	for (int i = 0; i < P; i++) {
+	vector<double> gPosition = generateRandom(d, boundaryLow, boundaryUp);
+	double gCost = 0;
+	cec20_test_func(gPosition.data(), &gCost, dimension, 1, testFunction);
 
+	for (int i = 0; i < P; i++)
+	{
 		vector<double> pozice;
-		for (double prvek : generateRandom(d, -100, 100)) {
-			pozice.push_back(prvek);
+		for (double xd : generateRandom(d, boundaryLow, boundaryUp))
+		{
+			pozice.push_back(xd);
 		}
-		jedinec tmpJedinec = { pozice, 0 };
+		jedinec tmpJedinec = {pozice, 0};
 		tmpJedinec.cost = 0;
-		cec20_test_func(pozice.data(), &tmpJedinec.cost, 10, 1, testFunction);
+		cec20_test_func(pozice.data(), &tmpJedinec.cost, dimension, 1, testFunction);
 		populace.push_back(tmpJedinec);
+		if (tmpJedinec.cost < gCost)
+		{
+			gPosition = tmpJedinec.position;
+			gCost = tmpJedinec.cost;
+		}
 	}
 
-
-	double currentCost = populace[0].cost;
-	double bestCost = currentCost;
-
-	while (fezCounter <= maxFez - P) {
-
+	while (iterations--)
+	{
 		vector<jedinec> uiPopulace;
-		for (jedinec j : populace) {
-			//pro kazdeho jedince uděláme mutační trik dle strategie RAND
-			//VYBER 3 NÁHODNÉ BODY z populace které se od sebe liší a liší se i od právě probíraného jedince
-			vector<jedinec> tempPopul = populace;
-			vector<jedinec> dreiIdioten = get3blbecky(tempPopul, j);
-			vector<double> vi;
-			vector<double> ui;
-
-			for (int i = 0; i < d; i++) {
-				vi.push_back(dreiIdioten[0].position[i] + F * (dreiIdioten[1].position[i] - dreiIdioten[2].position[i]));
-			}
-			//VRATIT DO SPRÁVNÝCH DIMENZÍ
-
-			for (int ip = 0; ip < vi.size(); ip++) {
-				if (-5.12 > vi[ip] || vi[ip] > 5.12) {
-					vi[ip] = generateRandom(1, -5.12, 5.12).at(0);
+		//For each agent x in the population do:
+		for (jedinec x : populace)
+		{
+			//Pick three unique agents
+			vector<jedinec> threeUnique = get3unique(populace, x);
+			//Pick a random index R
+			double R = generateRandomDouble(1, d);
+			//Compute the agent's potentially new position y
+			vector<double> y;
+			for (int i = 0; i < d; i++)
+			{
+				//pick a uniformly distributed random number ri
+				double r = generateRandomDouble(0, 1);
+				if (r < CR || i == R)
+				{
+					double yi = threeUnique[0].position[i] + F * (threeUnique[1].position[i] - threeUnique[2].position[i]);
+					//out of dimension check
+					if (boundaryLow > yi || yi > boundaryUp)
+					{
+						y.push_back(generateRandomDouble(boundaryLow, boundaryUp));
+					}
+					else
+					{
+						y.push_back(yi);
+					}
+				}
+				// otherwise set yi = xi
+				else
+				{
+					y.push_back(x.position[i]);
 				}
 			}
-
-
-			//generuj vektor ui, tak, že uděláš křížení vi a j
-			int k = 0;
-			for (double dimenze : vi) {
-				double randomCR = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-				int random0L = (rand() % d);
-				if (randomCR < c || random0L == k) {
-					ui.push_back(vi[k]);
-				}
-				else {
-					ui.push_back(j.position[k]);
-				}
-				k++;
-			}
-
-			jedinec uiJedinec;
-			uiJedinec.position = ui;
-			uiPopulace.push_back(uiJedinec);
-
-		}
-
-		for (int j = 0; j < P; j++) {
-			double cenaUI = 0;
-			cec20_test_func(uiPopulace[j].position.data(), &cenaUI, 10, 1, testFunction);
-			double cenaXI = populace[j].cost;
-
-
-			currentCost = cenaXI;
-			if (cenaUI < cenaXI) {
-				populace[j].position = uiPopulace[j].position;
-				populace[j].cost = cenaUI;
-				currentCost = cenaUI;
-			}
-			if (currentCost < bestCost) {
-				bestCost = currentCost;
-			}
-
+			double yCost = 0;
+			cec20_test_func(y.data(), &yCost, dimension, 1, testFunction);
 			fezCounter++;
+
 			result res;
+			res.cost = gCost;
 			res.fez = fezCounter;
-			res.cost = bestCost;
 			bestResults.push_back(res);
 
+			if (fezCounter > maxFez)
+            {
+                std::cout << "break fez";
+                return bestResults;
+            }
+
+			if (yCost <= x.cost)
+			{
+				//then replace the agent x in the population with  y.
+				x.position = y;
+				x.cost = yCost;
+				if (yCost < gCost)
+				{
+					gCost = yCost;
+					gPosition = y;
+				}
+			}
 		}
 	}
 	return bestResults;
 }
-
-
