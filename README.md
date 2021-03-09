@@ -3,7 +3,7 @@
 HOW TO RUN:
 Main file is HeuristicCSVGenerator.cpp
 - include your algorithm at the top of the file following these rules:
-1. run function is vector<result> run(dimension, testFunctionNumber, boundaryLow, boundaryUp)
+1. run function is vector\<result\> run(dimension, testFunctionNumber, boundaryLow, boundaryUp)
 2. result is a struct containing: int fez, double cost.
 
 fez - current function evaluation count
