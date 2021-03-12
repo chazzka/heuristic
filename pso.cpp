@@ -14,13 +14,13 @@ struct Particle
 {
     vector<double> positionXi;
     vector<double> velocityVectorVi;
-    vector<double> pBestPi; //best known position
+    vector<double> pBestPi;
     double pBestCost;
 };
 
 inline vector<double> generateRandomRange(int size, double min, double max)
 {
-    std::vector<double> rndNumbers;
+    vector<double> rndNumbers;
 
     double randomNumber;
     for (int index = 0; index < size; index++)
@@ -48,11 +48,12 @@ inline vector<result> run(int dimension, int testFunction, int boundaryLow, int 
     //vars
     int MAX_FEZ = 5000 * dimension;
     vector<result> best_results;
-    int generations = 10;
-    int popSize = 10;
-    int c1 = 2;
-    int c2 = 2;
-    double w = 0.7; //TODO: DO not know yet
+    //Engelbrecht
+    int generations = 50;
+    int popSize = 30;
+    int c1 = 1.496180;
+    int c2 = c1;
+    double w = 0.729844; //TODO: DO not know yet
     double learningRate = 0.8;
     int fezCounter = 0;
 

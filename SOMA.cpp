@@ -25,7 +25,6 @@ struct result
 
 inline ohodnocenaPopulace getLeader(vector<jedinec> population, int testFunction, int dimension)
 {
-    //    double best_cost = first_dejong(population[0].position);
     double best_cost = 0;
     cec20_test_func(population[0].position.data(), &best_cost, dimension, 1, testFunction);
 

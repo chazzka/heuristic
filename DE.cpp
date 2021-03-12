@@ -71,8 +71,8 @@ inline vector<result> run(int dimension, int testFunction, double boundaryLow, d
 	//Choose the parameters
 	int d = dimension;
 	int P = 50;
-	float CR = 0.9;
-	double F = 0.8;
+	float CR = 0.8;
+	double F = 0.5;
 	int iterations = 1000;
 
 	//helper vars
