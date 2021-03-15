@@ -1,7 +1,6 @@
 ﻿#include <vector>
 #include <random>
 #include <iostream>
-using namespace std;
 
 struct jedinec
 {
@@ -15,7 +14,7 @@ struct result
 	double cost;
 };
 
-inline vector<double> generateRandom(int size, double min, double max)
+std::vector<double> generateRandom(int size, double min, double max)
 {
 	std::vector<double> rndNumbers;
 
@@ -30,12 +29,12 @@ inline vector<double> generateRandom(int size, double min, double max)
 	return rndNumbers;
 }
 
-inline double generateRandomDouble(double min, double max)
+double generateRandomDouble(double min, double max)
 {
 	return (max - min) * ((double)rand() / (double)RAND_MAX) + min;
 }
 
-inline vector<jedinec> get3unique(vector<jedinec> populace, jedinec jed)
+std::vector<jedinec> get3unique(std::vector<jedinec> populace, jedinec jed)
 {
 
 	int i = 0;
@@ -49,7 +48,7 @@ inline vector<jedinec> get3unique(vector<jedinec> populace, jedinec jed)
 		i++;
 	}
 
-	vector<jedinec> result;
+	std::vector<jedinec> result;
 
 	for (int i = 0; i < 3; i++)
 	{
@@ -63,10 +62,8 @@ inline vector<jedinec> get3unique(vector<jedinec> populace, jedinec jed)
 
 void cec20_test_func(double *, double *, int, int, int);
 
-vector<result> run(int dimension, int testFunction, double boundaryLow, double boundaryUp);
-
 //DE/rand/1/bin
-inline vector<result> run(int dimension, int testFunction, double boundaryLow, double boundaryUp)
+std::vector<result> run(int dimension, int testFunction, double boundaryLow, double boundaryUp)
 {
 	//Choose the parameters
 	int d = dimension;
@@ -79,17 +76,17 @@ inline vector<result> run(int dimension, int testFunction, double boundaryLow, d
 	int fezCounter = 0;
 	int maxFez = 5000 * d;
 
-	vector<result> bestResults;
+	std::vector<result> bestResults;
 
 	//Initialize all agents x with random positions in the search-space.
-	vector<jedinec> populace;
-	vector<double> gPosition = generateRandom(d, boundaryLow, boundaryUp);
+	std::vector<jedinec> populace;
+	std::vector<double> gPosition = generateRandom(d, boundaryLow, boundaryUp);
 	double gCost = 0;
 	cec20_test_func(gPosition.data(), &gCost, dimension, 1, testFunction);
 
 	for (int i = 0; i < P; i++)
 	{
-		vector<double> pozice;
+		std::vector<double> pozice;
 		for (double xd : generateRandom(d, boundaryLow, boundaryUp))
 		{
 			pozice.push_back(xd);
@@ -107,16 +104,16 @@ inline vector<result> run(int dimension, int testFunction, double boundaryLow, d
 
 	while (iterations--)
 	{
-		vector<jedinec> uiPopulace;
+		std::vector<jedinec> uiPopulace;
 		//For each agent x in the population do:
 		for (jedinec x : populace)
 		{
 			//Pick three unique agents
-			vector<jedinec> threeUnique = get3unique(populace, x);
+			std::vector<jedinec> threeUnique = get3unique(populace, x);
 			//Pick a random index R
 			double R = generateRandomDouble(1, d);
 			//Compute the agent's potentially new position y
-			vector<double> y;
+			std::vector<double> y;
 			for (int i = 0; i < d; i++)
 			{
 				//pick a uniformly distributed random number ri

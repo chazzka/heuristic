@@ -2,8 +2,6 @@
 #include <iostream>
 #include <random>
 
-using namespace std;
-
 struct result
 {
     int fez;
@@ -12,15 +10,15 @@ struct result
 
 struct Particle
 {
-    vector<double> positionXi;
-    vector<double> velocityVectorVi;
-    vector<double> pBestPi;
+    std::vector<double> positionXi;
+    std::vector<double> velocityVectorVi;
+    std::vector<double> pBestPi;
     double pBestCost;
 };
 
-inline vector<double> generateRandomRange(int size, double min, double max)
+std::vector<double> generateRandomRange(int size, double min, double max)
 {
-    vector<double> rndNumbers;
+    std::vector<double> rndNumbers;
 
     double randomNumber;
     for (int index = 0; index < size; index++)
@@ -33,7 +31,7 @@ inline vector<double> generateRandomRange(int size, double min, double max)
     return rndNumbers;
 }
 
-inline double generateRandomDouble(double min, double max)
+double generateRandomDouble(double min, double max)
 {
 
     return (max - min) * ((double)rand() / (double)RAND_MAX) + min;
@@ -41,13 +39,11 @@ inline double generateRandomDouble(double min, double max)
 
 void cec20_test_func(double *, double *, int, int, int);
 
-vector<result> run(int dimension, int testFunction, int boundaryLow, int boundaryUp);
-
-inline vector<result> run(int dimension, int testFunction, int boundaryLow, int boundaryUp)
+std::vector<result> run(int dimension, int testFunction, int boundaryLow, int boundaryUp)
 {
     //vars
     int MAX_FEZ = 5000 * dimension;
-    vector<result> best_results;
+    std::vector<result> best_results;
     //Engelbrecht
     int generations = 50;
     int popSize = 30;
@@ -57,15 +53,15 @@ inline vector<result> run(int dimension, int testFunction, int boundaryLow, int 
     double learningRate = 0.8;
     int fezCounter = 0;
 
-    vector<Particle> population;
+    std::vector<Particle> population;
     //leader
-    vector<double> leadingPosG = generateRandomRange(dimension, boundaryLow, boundaryUp);
+    std::vector<double> leadingPosG = generateRandomRange(dimension, boundaryLow, boundaryUp);
     double gCost = 0;
     cec20_test_func(leadingPosG.data(), &gCost, dimension, 1, testFunction);
 
     for (int i = 0; i < popSize; i++)
     {
-        vector<double> randomPosition = generateRandomRange(dimension, boundaryLow, boundaryUp);
+        std::vector<double> randomPosition = generateRandomRange(dimension, boundaryLow, boundaryUp);
         //Initialize the particle's position with a uniformly distributed random vector xi ~ U(blo, bup)
         //Initialize the particle's velocity: vi ~ U(-|bup-blo|, |bup-blo|)
         //Initialize the particle's best known position to its initial position: pi ← xi
@@ -115,7 +111,7 @@ inline vector<result> run(int dimension, int testFunction, int boundaryLow, int 
 
             if (fezCounter > MAX_FEZ)
             {
-                cout << "break fez";
+                std::cout << "break fez";
                 return best_results;
             }
 

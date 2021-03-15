@@ -2,8 +2,6 @@
 #include <iostream>
 #include <random>
 
-using namespace std;
-
 struct jedinec
 {
     int id;
@@ -14,7 +12,7 @@ struct jedinec
 struct ohodnocenaPopulace
 {
     jedinec leader;
-    vector<jedinec> populace;
+    std::vector<jedinec> populace;
 };
 
 struct result
@@ -23,7 +21,7 @@ struct result
     double cost;
 };
 
-inline ohodnocenaPopulace getLeader(vector<jedinec> population, int testFunction, int dimension)
+ohodnocenaPopulace getLeader(std::vector<jedinec> population, int testFunction, int dimension)
 {
     double best_cost = 0;
     cec20_test_func(population[0].position.data(), &best_cost, dimension, 1, testFunction);
@@ -48,7 +46,7 @@ inline ohodnocenaPopulace getLeader(vector<jedinec> population, int testFunction
     return {tempLeader, population};
 }
 
-inline vector<double> generateRandom(int size, double min, double max)
+std::vector<double> generateRandom(int size, double min, double max)
 {
     std::vector<double> rndNumbers;
 
@@ -63,9 +61,9 @@ inline vector<double> generateRandom(int size, double min, double max)
     return rndNumbers;
 }
 
-inline vector<double> vec_subtract(vector<double> first, vector<double> second)
+std::vector<double> vec_subtract(std::vector<double> first, std::vector<double> second)
 {
-    vector<double> result;
+    std::vector<double> result;
     for (int i = 0; i < first.size(); i++)
     {
         result.push_back(first[i] - second[i]);
@@ -73,9 +71,9 @@ inline vector<double> vec_subtract(vector<double> first, vector<double> second)
     return result;
 }
 
-inline vector<double> vec_add(vector<double> first, vector<double> second)
+std::vector<double> vec_add(std::vector<double> first, std::vector<double> second)
 {
-    vector<double> result;
+    std::vector<double> result;
     for (int i = 0; i < first.size(); i++)
     {
         result.push_back(first[i] + second[i]);
@@ -83,9 +81,9 @@ inline vector<double> vec_add(vector<double> first, vector<double> second)
     return result;
 }
 
-inline vector<double> vec_multiply_with_cislo(vector<double> first, double cislo)
+std::vector<double> vec_multiply_with_cislo(std::vector<double> first, double cislo)
 {
-    vector<double> result;
+    std::vector<double> result;
     for (int i = 0; i < first.size(); i++)
     {
         result.push_back(first[i] * cislo);
@@ -93,9 +91,9 @@ inline vector<double> vec_multiply_with_cislo(vector<double> first, double cislo
     return result;
 }
 
-inline vector<double> vec_multiply_with_vector(vector<double> first, vector<double> second)
+std::vector<double> vec_multiply_with_vector(std::vector<double> first, std::vector<double> second)
 {
-    vector<double> result;
+    std::vector<double> result;
     for (int i = 0; i < first.size(); i++)
     {
         result.push_back(first[i] * second[i]);
@@ -105,13 +103,11 @@ inline vector<double> vec_multiply_with_vector(vector<double> first, vector<doub
 
 void cec20_test_func(double *, double *, int, int, int);
 
-vector<result> run(int dimension, int testFunction, int boundaryLow, int boundaryUp);
-
 //nedojede do 50k, protože je omezeny migracemi
-inline vector<result> run(int dimension, int testFunction, int boundaryLow, int boundaryUp)
+std::vector<result> run(int dimension, int testFunction, int boundaryLow, int boundaryUp)
 {
 
-    vector<result> best_results;
+    std::vector<result> best_results;
     double t = 0;
     int path_length = 3;
     double step = 0.33;
@@ -124,11 +120,11 @@ inline vector<result> run(int dimension, int testFunction, int boundaryLow, int 
     int konec = 0;
     int fezcounter = 0;
     //22050 fezů
-    vector<jedinec> populace;
+    std::vector<jedinec> populace;
     for (int i = 0; i < pop_size; i++)
     {
 
-        vector<double> pozice;
+        std::vector<double> pozice;
         for (double prvek : generateRandom(d, boundaryLow, boundaryUp))
         {
             pozice.push_back(prvek);
@@ -150,13 +146,13 @@ inline vector<result> run(int dimension, int testFunction, int boundaryLow, int 
         {
             if (konec == 1)
             {
-                cout << "konec" << endl;
+                std::cout << "konec" << std::endl;
                 continue;
             }
 
             if (jedinec.id != leader_of_population.id)
             {
-                vector<double> potencial_position = jedinec.position;
+                std::vector<double> potencial_position = jedinec.position;
                 t = 0;
                 double actual_cost = jedinec.cost;
                 int countera = 0;
@@ -165,7 +161,7 @@ inline vector<result> run(int dimension, int testFunction, int boundaryLow, int 
                 {
                     countera++;
 
-                    vector<double> PRTVector = generateRandom(dimension, 0, 1);
+                    std::vector<double> PRTVector = generateRandom(dimension, 0, 1);
 
                     for (int i_p = 0; i_p < PRTVector.size(); i_p++)
                     {
@@ -187,7 +183,7 @@ inline vector<result> run(int dimension, int testFunction, int boundaryLow, int 
                     {
                         if (boundaryLow > potencial_position[ip] || potencial_position[ip] > boundaryUp)
                         {
-                            vector<double> randomNUm = generateRandom(1, boundaryLow, boundaryUp);
+                            std::vector<double> randomNUm = generateRandom(1, boundaryLow, boundaryUp);
                             potencial_position[ip] = randomNUm[0];
                         }
                     }
@@ -205,7 +201,7 @@ inline vector<result> run(int dimension, int testFunction, int boundaryLow, int 
                     if (fezcounter > pocet_accepted_fezu)
                     {
                         konec = 1;
-                        cout << "break fez";
+                        std::cout << "break fez";
                         //todo: tady asi spis return
                         break;
                     }

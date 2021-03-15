@@ -1,6 +1,5 @@
 ﻿#include <vector>
 #include <random>
-using namespace std;
 
 struct jedinec
 {
@@ -16,7 +15,7 @@ struct result
 	double cost;
 };
 
-inline vector<double> generateRandom(int size, double min, double max)
+std::vector<double> generateRandom(int size, double min, double max)
 {
 	std::vector<double> rndNumbers;
 
@@ -32,7 +31,7 @@ inline vector<double> generateRandom(int size, double min, double max)
 }
 
 
-inline vector<jedinec> get3blbecky(vector<jedinec> populace, jedinec jed) {
+std::vector<jedinec> get3blbecky(std::vector<jedinec> populace, jedinec jed) {
 
 	int i = 0;
 	for (jedinec j : populace) {
@@ -43,7 +42,7 @@ inline vector<jedinec> get3blbecky(vector<jedinec> populace, jedinec jed) {
 		i++;
 	}
 
-	vector<jedinec> result;
+	std::vector<jedinec> result;
 
 	for (int i = 0; i < 3; i++) {
 		int ran = (rand() % populace.size());
@@ -56,9 +55,7 @@ inline vector<jedinec> get3blbecky(vector<jedinec> populace, jedinec jed) {
 
 void cec20_test_func(double*, double*, int, int, int);
 
-vector<result> run(int dimension, int testFunction, int boundaryLow, int boundaryUp);
-
-inline vector<result> run(int dimension, int testFunction, int boundaryLow, int boundaryUp) {
+std::vector<result> run(int dimension, int testFunction, int boundaryLow, int boundaryUp) {
 
 	int d = dimension;
 	int P = 50; //teď už je to OK
@@ -67,13 +64,13 @@ inline vector<result> run(int dimension, int testFunction, int boundaryLow, int 
 	int fezCounter = 0;
 	int maxFez = 5000 * d;
 
-	vector<result> bestResults;
+	std::vector<result> bestResults;
 
 	//generujeme populaci jedinců o velikosti P a dimenze D
-	vector<jedinec> populace;
+	std::vector<jedinec> populace;
 	for (int i = 0; i < P; i++) {
 
-		vector<double> pozice;
+		std::vector<double> pozice;
 		for (double prvek : generateRandom(d, boundaryLow, boundaryUp)) {
 			pozice.push_back(prvek);
 		}
@@ -90,12 +87,12 @@ inline vector<result> run(int dimension, int testFunction, int boundaryLow, int 
 
 	while (fezCounter <= maxFez - P) {
 
-		vector<jedinec> uiPopulace;
+		std::vector<jedinec> uiPopulace;
 		for (jedinec j : populace) {
 			//pro kazdeho jedince uděláme mutační trik dle strategie RAND
 			//VYBER 3 NÁHODNÉ BODY z populace které se od sebe liší a liší se i od právě probíraného jedince
-			vector<jedinec> tempPopul = populace;
-			vector<jedinec> dreiIdioten = get3blbecky(tempPopul, j);
+			std::vector<jedinec> tempPopul = populace;
+			std::vector<jedinec> dreiIdioten = get3blbecky(tempPopul, j);
 
 			//předtím než vypočítám vi provedu mutování CR a F s P = 10%          
 			double tau = 0.1;
@@ -118,8 +115,8 @@ inline vector<result> run(int dimension, int testFunction, int boundaryLow, int 
 				potencialCR = rand3;
 			}
 
-			vector<double> vi;
-			vector<double> ui;
+			std::vector<double> vi;
+			std::vector<double> ui;
 
 			for (int i = 0; i < d; i++) {
 				vi.push_back(dreiIdioten[0].position[i] + potencialF * (dreiIdioten[1].position[i] - dreiIdioten[2].position[i]));
