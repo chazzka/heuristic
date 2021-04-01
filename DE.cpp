@@ -68,8 +68,8 @@ std::vector<result> run(int dimension, int testFunction, double boundaryLow, dou
 	//Choose the parameters
 	int d = dimension;
 	int P = 50;
-	float CR = 0.8;
-	double F = 0.5;
+	float CR = 0.8f;
+	float F = 0.5f;
 	int iterations = 1000;
 
 	//helper vars

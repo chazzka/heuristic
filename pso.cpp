@@ -47,8 +47,8 @@ std::vector<result> run(int dimension, int testFunction, int boundaryLow, int bo
     //Engelbrecht
     int generations = 50;
     int popSize = 30;
-    int c1 = 1.496180;
-    int c2 = c1;
+    double c1 = 1.496180;
+    double c2 = c1;
     double w = 0.729844; //TODO: DO not know yet
     double learningRate = 0.8;
     int fezCounter = 0;
