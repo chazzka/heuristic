@@ -1,6 +1,7 @@
 #include <vector>
 #include <iostream>
 #include <random>
+#include "../cec20_test_func.cpp"
 
 struct result
 {
@@ -36,8 +37,6 @@ double generateRandomDouble(double min, double max)
 
     return (max - min) * ((double)rand() / (double)RAND_MAX) + min;
 }
-
-void cec20_test_func(double *, double *, int, int, int);
 
 std::vector<result> run(int dimension, int testFunction, int boundaryLow, int boundaryUp)
 {

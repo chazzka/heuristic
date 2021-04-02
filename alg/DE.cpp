@@ -1,6 +1,7 @@
 ﻿#include <vector>
 #include <random>
 #include <iostream>
+#include "../cec20_test_func.cpp"
 
 struct jedinec
 {
@@ -59,8 +60,6 @@ std::vector<jedinec> get3unique(std::vector<jedinec> populace, jedinec jed)
 
 	return result;
 }
-
-void cec20_test_func(double *, double *, int, int, int);
 
 //DE/rand/1/bin
 std::vector<result> run(int dimension, int testFunction, double boundaryLow, double boundaryUp)

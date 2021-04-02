@@ -1,6 +1,7 @@
 ﻿#include <vector>
 #include <iostream>
 #include <random>
+#include "../cec20_test_func.cpp"
 
 struct jedinec
 {
@@ -101,7 +102,6 @@ std::vector<double> vec_multiply_with_vector(std::vector<double> first, std::vec
     return result;
 }
 
-void cec20_test_func(double *, double *, int, int, int);
 
 //nedojede do 50k, protože je omezeny migracemi
 std::vector<result> run(int dimension, int testFunction, int boundaryLow, int boundaryUp)

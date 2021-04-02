@@ -3,7 +3,7 @@
 #include <time.h>
 #include <string>
 #include <fstream>
-#include "cec20_test_func.cpp"
+
 
 
 //CHOOSE ALGORITHM  (SOMA, JDE, PSO, DE)
@@ -34,8 +34,6 @@ const char * alg_name = "JDE";
 #include "alg/pso.cpp"
 const char * alg_name = "PSO";
 #endif // PSO
-
-void cec20_test_func(double*, double*, int, int, int);
 
 
 void makeCSVfile(std::string filename, std::vector<std::vector<result>> result)
