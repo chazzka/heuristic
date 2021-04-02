@@ -23,6 +23,8 @@ cost - function evaluation value at current fez number
 
 # for docker
 
+HeuristicCSVGenerator.cpp line 44 switch to docker file open
+
 docker build -t heuristic Dockerfile_location
 
 docker run -v PATH_IN_HOST:/usr/src/results -it heuristic
