@@ -6,10 +6,10 @@
 
 
 
-//CHOOSE ALGORITHM  (SOMA, JDE, PSO, DE)
-#define DE
+//CHOOSE ALGORITHM  (SOMA, JDE, PSO, PSO_NOV, DE)
+#define PSO_NOV
 //CHOOSE NUMBER OF RUNS
-#define RUNS 1
+#define RUNS 10
 
 
 #define BOUNDARY_LOW -100
@@ -34,6 +34,11 @@ const char * alg_name = "JDE";
 #include "alg/pso.cpp"
 const char * alg_name = "PSO";
 #endif // PSO
+
+#ifdef PSO_NOV
+#include "alg/pso_nov1.cpp"
+const char * alg_name = "PSO_NOV";
+#endif // PSO_NOV
 
 
 void makeCSVfile(std::string filename, std::vector<std::vector<result>> result)
@@ -75,7 +80,7 @@ int main()
 	
 	srand((unsigned)time(0));
 
-
+	
 	//10 D
 	dimensionSize = 10;
 	std::vector<std::string> names = { "BendCigar", "RotatedSchwefel", "Lunacek", "Rosenbrock", "HybridOne", "HybridOneTwo", "HybridOneThree", "CompositionOne", "CompositionTwo", "CompositionThree" };
@@ -86,7 +91,7 @@ int main()
 		}
 		makeCSVfile(alg_name + names[funkce - 1] + std::to_string(dimensionSize) + "d", csv);
 	}
-
+	
 	//20 D
 	dimensionSize = 20;
 	for (int funkce = 1; funkce <= 10; funkce++) {
@@ -96,7 +101,7 @@ int main()
 		}
 		makeCSVfile(alg_name + names[funkce - 1] + std::to_string(dimensionSize) + "d", csv);
 	}
-
+	
 	std::cout<< "finish" << std::endl;
 	
 
