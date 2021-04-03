@@ -44,7 +44,7 @@ std::vector<result> run(int dimension, int testFunction, int boundaryLow, int bo
     int MAX_FEZ = 5000 * dimension;
     std::vector<result> best_results;
     //Engelbrecht
-    int generations = 50;
+    int generations = 5000;
     int popSize = 30;
     double c1 = 1.496180;
     double c2 = c1;

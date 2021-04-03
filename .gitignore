@@ -1,2 +1,3 @@
 /.vscode
 /HeuristicCSVGenerator.exe
+/out/*.csv
