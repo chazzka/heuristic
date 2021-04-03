@@ -3,7 +3,7 @@
 #include <iostream>
 #include "../cec20_test_func.cpp"
 
-struct jedinec
+struct Agent
 {
 	std::vector<double> position;
 	double cost;
@@ -35,11 +35,11 @@ double generateRandomDouble(double min, double max)
 	return (max - min) * ((double)rand() / (double)RAND_MAX) + min;
 }
 
-std::vector<jedinec> get3unique(std::vector<jedinec> populace, jedinec jed)
+std::vector<Agent> get3unique(std::vector<Agent> populace, Agent jed)
 {
 
 	int i = 0;
-	for (jedinec j : populace)
+	for (Agent j : populace)
 	{
 		if (j.position == jed.position)
 		{
@@ -49,7 +49,7 @@ std::vector<jedinec> get3unique(std::vector<jedinec> populace, jedinec jed)
 		i++;
 	}
 
-	std::vector<jedinec> result;
+	std::vector<Agent> result;
 
 	for (int i = 0; i < 3; i++)
 	{
@@ -78,7 +78,7 @@ std::vector<result> run(int dimension, int testFunction, double boundaryLow, dou
 	std::vector<result> bestResults;
 
 	//Initialize all agents x with random positions in the search-space.
-	std::vector<jedinec> populace;
+	std::vector<Agent> populace;
 	std::vector<double> gPosition = generateRandom(d, boundaryLow, boundaryUp);
 	double gCost = 0;
 	cec20_test_func(gPosition.data(), &gCost, dimension, 1, testFunction);
@@ -90,25 +90,25 @@ std::vector<result> run(int dimension, int testFunction, double boundaryLow, dou
 		{
 			pozice.push_back(xd);
 		}
-		jedinec tmpJedinec = {pozice, 0};
-		tmpJedinec.cost = 0;
-		cec20_test_func(pozice.data(), &tmpJedinec.cost, dimension, 1, testFunction);
-		populace.push_back(tmpJedinec);
-		if (tmpJedinec.cost < gCost)
+		Agent tmpAgent = {pozice, 0};
+		tmpAgent.cost = 0;
+		cec20_test_func(pozice.data(), &tmpAgent.cost, dimension, 1, testFunction);
+		populace.push_back(tmpAgent);
+		if (tmpAgent.cost < gCost)
 		{
-			gPosition = tmpJedinec.position;
-			gCost = tmpJedinec.cost;
+			gPosition = tmpAgent.position;
+			gCost = tmpAgent.cost;
 		}
 	}
 
 	while (iterations--)
 	{
-		std::vector<jedinec> uiPopulace;
+		std::vector<Agent> uiPopulace;
 		//For each agent x in the population do:
-		for (jedinec x : populace)
+		for (Agent x : populace)
 		{
 			//Pick three unique agents
-			std::vector<jedinec> threeUnique = get3unique(populace, x);
+			std::vector<Agent> threeUnique = get3unique(populace, x);
 			//Pick a random index R
 			double R = generateRandomDouble(1, d);
 			//Compute the agent's potentially new position y
