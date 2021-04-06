@@ -3,50 +3,54 @@
 #include <time.h>
 #include <string>
 #include <fstream>
+#include <bits/stdc++.h>
+#include <direct.h>
 
+//INCLUDE ALGORITHM
+#include "alg/pso.cpp"
+//choose nickname for it
+const char *alg_name = "PSO";
 
-
-//CHOOSE ALGORITHM  (SOMA, JDE, PSO, PSO_NOV, DE)
-#define PSO_NOV
 //CHOOSE NUMBER OF RUNS
-#define RUNS 10
+#define RUNS 1
 
+//OPTIONAL: COMMENT OUT ALGORITHMS YOU DON'T WANT TO RUN
+std::map<std::string, int> algorithms{
+	{"BendCigar", 1},
+	{"RotatedSchwefel", 2},
+	{"Lunacek", 3},
+	{"Rosenbrock", 4},
+	{"HybridOne", 5},
+	{"HybridOneTwo", 6},
+	{"HybridOneThree", 7},
+	{"CompositionOne", 8},
+	{"CompositionTwo", 9},
+	{"CompositionThree", 10},
+};
+
+//OPTIONAL: COMMENT OUT DIMENSIONS YOU DON'T WANT TO RUN (tested are 10,20)
+const int implementedDimensions[] = {
+	5,
+	//10,
+	//15,
+	//20,
+	//30,
+	//50,
+	//100
+};
 
 #define BOUNDARY_LOW -100
 #define BOUNDARY_UP 100
 
-#ifdef SOMA
-#include "alg/SOMA.cpp"
-const char * alg_name = "SOMA";
-#endif // SOMA
-
-#ifdef DE
-#include "alg/DE.cpp"
-const char * alg_name = "DErand1bin";
-#endif // DE
-
-#ifdef JDE
-#include "alg/JDE.cpp"
-const char * alg_name = "JDE";
-#endif // JDE
-
-#ifdef PSO
-#include "alg/pso.cpp"
-const char * alg_name = "PSO";
-#endif // PSO
-
-#ifdef PSO_NOV
-#include "alg/pso_nov1.cpp"
-const char * alg_name = "PSO_NOV";
-#endif // PSO_NOV
-
-
-void makeCSVfile(std::string filename, std::vector<std::vector<result>> result)
+void makeCSVfile(std::string filename, std::vector<std::vector<result>> &result, std::string algName)
 {
 	std::ofstream file;
-	file.open("out/" + filename + ".csv");
+	std::string folder = "out/" + algName;
+	mkdir(folder.c_str());
+	file.open("out/" + algName + "/" + filename + ".csv");
 	//for docker
 	//file.open("/usr/src/results/" + filename + ".csv");
+
 	std::vector<std::string> tempRes;
 	for (unsigned int i = 0; i < result.size(); i++)
 	{
@@ -70,42 +74,31 @@ void makeCSVfile(std::string filename, std::vector<std::vector<result>> result)
 	file.close();
 }
 
-
 int dimensionSize = 0;
 
 int main()
 {
 
-	std::cout<< "start" << std::endl;
-	
+	std::cout << "start" << std::endl;
+
 	srand((unsigned)time(0));
 
-	
-	//10 D
-	dimensionSize = 10;
-	std::vector<std::string> names = { "BendCigar", "RotatedSchwefel", "Lunacek", "Rosenbrock", "HybridOne", "HybridOneTwo", "HybridOneThree", "CompositionOne", "CompositionTwo", "CompositionThree" };
-	for (int funkce = 1; funkce <= 10; funkce++) {
-		std::vector<std::vector<result>> csv;
-		for (int j = 0; j < RUNS; j++) {
-			csv.push_back(run(dimensionSize, funkce, BOUNDARY_LOW, BOUNDARY_UP));
+	for (int dimensionSize : implementedDimensions)
+	{
+		std::map<std::string, int>::iterator i;
+		for (i = algorithms.begin(); i != algorithms.end(); i++)
+		{
+			std::vector<std::vector<result>> csv;
+			for (int j = 0; j < RUNS; j++)
+			{
+				csv.push_back(run(dimensionSize, i->second, BOUNDARY_LOW, BOUNDARY_UP));
+			}
+			
+			std::string algName = alg_name;		
+			makeCSVfile(algName + "_" + i->first + "_" + std::to_string(dimensionSize) + "d", csv, algName);
 		}
-		makeCSVfile(alg_name + names[funkce - 1] + std::to_string(dimensionSize) + "d", csv);
 	}
-	
-	//20 D
-	dimensionSize = 20;
-	for (int funkce = 1; funkce <= 10; funkce++) {
-		std::vector<std::vector<result>> csv;
-		for (int j = 0; j < RUNS; j++) {
-			csv.push_back(run(dimensionSize, funkce, BOUNDARY_LOW, BOUNDARY_UP));
-		}
-		makeCSVfile(alg_name + names[funkce - 1] + std::to_string(dimensionSize) + "d", csv);
-	}
-	
-	std::cout<< "finish" << std::endl;
-	
 
+	std::cout << "finish" << std::endl;
 	return 0;
 }
-
-
