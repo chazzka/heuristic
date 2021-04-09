@@ -43,13 +43,14 @@ std::vector<result> run(int dimension, int testFunction, int boundaryLow, int bo
     //vars
     int MAX_FEZ = 5000 * dimension;
     std::vector<result> best_results;
-    //Engelbrecht
-    int generations = 5000;
-    int popSize = 30;
-    double c1 = 1.496180;
+    int popSize = 25; //nebo 50, hlavně ať je to dělitelné 5000 - experimentuj a dívej se jak to vychází
+    int generations = MAX_FEZ / popSize;
+    double c1 = 1.496180; //Engelbrecth
     double c2 = c1;
-    double w = 0.729844; //TODO: DO not know yet
-    double learningRate = 0.8;
+    double wStart = 0.9;
+    double wEnd = 0.4;
+    double vMax = 0.2;
+    double w = wStart;
     int fezCounter = 0;
 
     std::vector<Particle> population;
@@ -62,6 +63,7 @@ std::vector<result> run(int dimension, int testFunction, int boundaryLow, int bo
     {
         std::vector<double> randomPosition = generateRandomRange(dimension, boundaryLow, boundaryUp);
         //Initialize the particle's position with a uniformly distributed random vector xi ~ U(blo, bup)
+        //TODO initial velocity 0?
         //Initialize the particle's velocity: vi ~ U(-|bup-blo|, |bup-blo|)
         //Initialize the particle's best known position to its initial position: pi ← xi
         Particle p = {randomPosition, generateRandomRange(dimension, -(boundaryUp - boundaryLow), (boundaryUp - boundaryLow)), randomPosition};
@@ -89,9 +91,38 @@ std::vector<result> run(int dimension, int testFunction, int boundaryLow, int bo
                 double rp = generateRandomDouble(0, 1);
                 double rg = generateRandomDouble(0, 1);
                 //Update the particle's velocity
-                population[i].velocityVectorVi[d] = w * population[i].velocityVectorVi[d] + c1 * rp * (population[i].pBestPi[d] - population[i].positionXi[d]) + c2 * rg * (leadingPosG[d] - population[i].positionXi[d]);
-                //Update the particle's position:  můžu ve stejnem foru?
-                population[i].positionXi[d] = population[i].positionXi[d] + learningRate * population[i].velocityVectorVi[d];
+                double potentialVectorD = w * population[i].velocityVectorVi[d] + c1 * rp * (population[i].pBestPi[d] - population[i].positionXi[d]) + c2 * rg * (leadingPosG[d] - population[i].positionXi[d]);
+
+                //TODO: zkontrolovat
+                //musíš zkontrolovat jestli ten nový velocity vector není větší než 0.2*200 (vMax * |-100-100|) - pozor bounds je vektor, každá dimenze může mít jiný rozsah, bound[d]
+                //pozor velikost vektoru může být negativní (takže musíš kontrolvat i vektor co míří na druhou stranu - mínusový musí pak ale mířit zas do mínusu!)
+                //pozor, výsledek může být 40 ale i -40
+                if (abs(potentialVectorD) > vMax * (boundaryUp - boundaryLow))
+                {
+                    if (potentialVectorD < 0)
+                    {
+                        population[i].velocityVectorVi[d] = -potentialVectorD;
+                    }
+                    else
+                    {
+                        population[i].velocityVectorVi[d] = potentialVectorD;
+                    }
+                }
+                else
+                {
+                    if (potentialVectorD < 0)
+                    {
+                        population[i].velocityVectorVi[d] = -vMax;
+                    }
+                    else
+                    {
+                        population[i].velocityVectorVi[d] = vMax;
+                    }
+                }
+
+                //Update the particle's position
+                population[i].positionXi[d] = population[i].positionXi[d] + population[i].velocityVectorVi[d];
+
                 //boundary check
                 if (boundaryLow > population[i].positionXi[d] || population[i].positionXi[d] > boundaryUp)
                 {
@@ -102,17 +133,6 @@ std::vector<result> run(int dimension, int testFunction, int boundaryLow, int bo
             double newXiCost = 0;
             cec20_test_func(population[i].positionXi.data(), &newXiCost, dimension, 1, testFunction);
             fezCounter++;
-
-            result res;
-            res.fez = fezCounter;
-            res.cost = gCost;
-            best_results.push_back(res);
-
-            if (fezCounter > MAX_FEZ)
-            {
-                std::cout << "break fez";
-                return best_results;
-            }
 
             if (newXiCost < population[i].pBestCost)
             {
@@ -126,7 +146,14 @@ std::vector<result> run(int dimension, int testFunction, int boundaryLow, int bo
                     leadingPosG = population[i].positionXi;
                 }
             }
+
+            result res;
+            res.fez = fezCounter;
+            res.cost = gCost;
+            best_results.push_back(res);
         }
+        //after generation run, recount w
+        w = wStart - ((wStart - wEnd) * g) / generations;
     }
 
     return best_results;
