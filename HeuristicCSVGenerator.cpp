@@ -4,6 +4,11 @@
 #include <string>
 #include <fstream>
 #include <bits/stdc++.h>
+#ifdef _WIN32
+#include <direct.h>
+#elif defined __linux__
+#include <sys/stat.h>
+#endif
 
 //INCLUDE ALGORITHM
 #include "alg/pso_nov1.cpp"
