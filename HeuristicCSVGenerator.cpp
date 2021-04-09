@@ -4,11 +4,6 @@
 #include <string>
 #include <fstream>
 #include <bits/stdc++.h>
-#ifdef _WIN32
-#include <direct.h>
-#elif defined __linux__
-#include <sys/stat.h>
-#endif
 
 //INCLUDE ALGORITHM
 #include "alg/pso_nov1.cpp"
@@ -50,7 +45,11 @@ void makeCSVfile(std::string filename, std::vector<std::vector<result>> &result,
 {
 	std::ofstream file;
 	std::string folder = "out/" + algName;
-	mkdir(folder.c_str());
+#if defined(_WIN32)
+	_mkdir(folder.c_str());
+#else
+	mkdir(folder.c_str(), 777);
+#endif
 	file.open("out/" + algName + "/" + filename + ".csv");
 	//for docker
 	//file.open("/usr/src/results/" + filename + ".csv");
@@ -97,8 +96,8 @@ int main()
 			{
 				csv.push_back(run(dimensionSize, i->second, BOUNDARY_LOW, BOUNDARY_UP));
 			}
-			
-			std::string algName = alg_name;		
+
+			std::string algName = alg_name;
 			makeCSVfile(algName + "_" + i->first + "_" + std::to_string(dimensionSize) + "d", csv, algName);
 		}
 	}
