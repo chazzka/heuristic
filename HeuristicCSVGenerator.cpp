@@ -53,7 +53,7 @@ void makeCSVfile(std::string filename, std::vector<std::vector<result>> &result,
 #if defined(_WIN32)
 	_mkdir(folder.c_str());
 #else
-	mkdir(folder.c_str(), 777);
+	mkdir(folder.c_str(), 0775);
 #endif
 	file.open("out/" + algName + "/" + filename + ".csv");
 	//for docker
