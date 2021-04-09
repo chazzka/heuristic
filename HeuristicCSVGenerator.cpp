@@ -4,12 +4,16 @@
 #include <string>
 #include <fstream>
 #include <bits/stdc++.h>
+#ifdef _WIN32
 #include <direct.h>
+#elif defined __linux__
+#include <sys/stat.h>
+#endif
 
 //INCLUDE ALGORITHM
-#include "alg/pso.cpp"
+#include "alg/pso_nov1.cpp"
 //choose nickname for it
-const char *alg_name = "PSO";
+const char *alg_name = "PSOfa";
 
 //CHOOSE NUMBER OF RUNS
 #define RUNS 1
