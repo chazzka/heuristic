@@ -56,7 +56,7 @@ public:
         double wStart = 0.9, double wEnd = 0.4, double vMax = 0.2, double boundaryLow = 0, double boundaryUp = 0)
         : singleDimensionFes_(singleDimensionFes), popSize_(popSize), dimension_(dimension), testFunction_(testFunction),
           c1_(c1), c2_(c2), wStart_(wStart), wEnd_(wEnd), w_(wStart),
-          vMax_(vMax), boundaryLow_(boundaryLow_), boundaryUp_(boundaryUp)
+          vMax_(vMax), boundaryLow_(boundaryLow), boundaryUp_(boundaryUp)
     {
     }
 
@@ -91,7 +91,8 @@ public:
 
                     double potentialVectorD = w_ * currentParticle.velocityVectorVi[d] + c1_ * rp * (currentParticle.pBestPi[d] - currentParticle.positionXi[d]) + c2_ * rg * (leadingPosG[d] - currentParticle.positionXi[d]);
                     //Update the particle's velocity
-                    currentParticle.velocityVectorVi[d] = fmax(fmin(potentialVectorD, boundaryUp), boundaryLow);
+                    double vParam = vMax_ * (boundaryUp - boundaryLow);
+                    currentParticle.velocityVectorVi[d] = fmax(fmin(potentialVectorD, vParam), -vParam);
                     //Update the particle's position
                     currentParticle.positionXi[d] = currentParticle.positionXi[d] + currentParticle.velocityVectorVi[d];
 
