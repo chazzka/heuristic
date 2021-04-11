@@ -52,7 +52,7 @@ namespace utils
 
         std::multiset<double>::iterator it = euclideanSet.begin();
         //begin from 1 - always ignore the first zero distance (self distance)
-        for (int i = 1; i < k; ++i)
+        for (int i = 1; i <= k; ++i)
         {
             sum += *it++;
         }
