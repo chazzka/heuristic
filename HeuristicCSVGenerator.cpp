@@ -11,12 +11,14 @@
 #endif
 
 //INCLUDE ALGORITHM
-#include "alg/pso_nov1.cpp"
+#include "alg/PSO.cpp"
 //choose nickname for it
-const char *alg_name = "PSOfa";
+const char *alg_name = "PSOClass";
+Algorithm alg;
+
 
 //CHOOSE NUMBER OF RUNS
-#define RUNS 1
+#define RUNS 10
 
 //OPTIONAL: COMMENT OUT ALGORITHMS YOU DON'T WANT TO RUN
 std::map<std::string, int> algorithms{
@@ -34,8 +36,8 @@ std::map<std::string, int> algorithms{
 
 //OPTIONAL: COMMENT OUT DIMENSIONS YOU DON'T WANT TO RUN (tested are 10,20)
 const int implementedDimensions[] = {
-	5,
-	//10,
+	//5,
+	10,
 	//15,
 	//20,
 	//30,
@@ -99,7 +101,7 @@ int main()
 			std::vector<std::vector<result>> csv;
 			for (int j = 0; j < RUNS; j++)
 			{
-				csv.push_back(run(dimensionSize, i->second, BOUNDARY_LOW, BOUNDARY_UP));
+				csv.push_back(alg.run(dimensionSize, i->second, BOUNDARY_LOW, BOUNDARY_UP));
 			}
 
 			std::string algName = alg_name;
