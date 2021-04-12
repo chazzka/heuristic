@@ -76,7 +76,7 @@ public:
     {
     }
 
-    std::vector<result> run(int dimension, int testFunction, int boundaryLow, int boundaryUp)
+    std::vector<result> run(int dimension, int testFunction, double boundaryLow, double boundaryUp)
     {
         dimension_ = dimension;
         testFunction_ = testFunction;

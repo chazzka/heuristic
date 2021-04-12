@@ -2,3 +2,9 @@
 /.vscode
 /HeuristicCSVGenerator.exe
 /out/*
+/Debug
+heuristic.sln
+heuristic.vcxproj
+heuristic.vcxproj.filters
+heuristic.vcxproj.user
+CppProperties.json

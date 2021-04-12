@@ -9,7 +9,7 @@ namespace utils
         double getEuclideanDistance(const std::vector<double> &from, const std::vector<double> &to)
         {
             double sum = 0;
-            for (int i = 0; i < from.size(); i++)
+            for (size_t i = 0; i < from.size(); i++)
             {
                 sum += pow((to[i] - from[i]), 2);
             }
@@ -45,7 +45,7 @@ namespace utils
         double sum = 0;
         double ro = 0;
 
-        for (int i = 0; i < all.size(); i++)
+        for (size_t i = 0; i < all.size(); i++)
         {
             euclideanSet.insert(getEuclideanDistance(current, all[i]));
         }

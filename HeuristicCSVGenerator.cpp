@@ -3,7 +3,7 @@
 #include <time.h>
 #include <string>
 #include <fstream>
-#include <bits/stdc++.h>
+#include <map>
 #ifdef _WIN32
 #include <direct.h>
 #elif defined __linux__
@@ -11,9 +11,10 @@
 #endif
 
 //INCLUDE ALGORITHM
-#include "alg/PSO.cpp"
+#include "alg/PsoNovA.cpp"
+
 //choose nickname for it
-const char *alg_name = "PSOClass";
+const char *alg_name = "PSONovClass";
 Algorithm alg;
 
 
