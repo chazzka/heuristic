@@ -18,13 +18,13 @@ private:
         double ro;
     };
 
-    void initPopulation(std::vector<Particle> &population, std::vector<double> &leadingPosG, double gCost)
+    void initPopulation(std::vector<Particle> &population, std::vector<double> &leadingPosG, double gCost, std::vector<std::vector<double>> &positions)
     {
         for (int i = 0; i < popSize_; i++)
         {
             std::vector<double> randomPosition = utils::generateRandomRange(dimension_, boundaryLow_, boundaryUp_);
+            positions.push_back(randomPosition);
             //Initialize the particle's position with a uniformly distributed random vector xi ~ U(BOUNDARY_LOW, BOUNDARY_UP)
-            //TODO initial velocity 0?
             //Initialize the particle's velocity: vi ~ U(-|BOUNDARY_UP-BOUNDARY_LOW|, |BOUNDARY_UP-BOUNDARY_LOW|), maybe 0 would be better
             //Initialize the particle's best known position to its initial position: pi ← xi
             Particle p = {randomPosition, utils::generateRandomRange(dimension_, 0, 0), randomPosition};
@@ -94,7 +94,7 @@ public:
 
         //positions will be used for novelty evaluation
         std::vector<std::vector<double>> positions;
-        initPopulation(population, leadingPosG, gCost);
+        initPopulation(population, leadingPosG, gCost, positions);
 
         Particle mostUnique;
         double biggestRo = 0;

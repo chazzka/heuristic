@@ -1,8 +1,8 @@
 #include <vector>
 #include <iostream>
 #include <random>
-#include "../cec20_test_func.cpp"
-#include "../utils/utils.cpp"
+#include "../../cec20_test_func.cpp"
+#include "../../utils/utils.cpp"
 
 //K in K-NN
 #define K 5
